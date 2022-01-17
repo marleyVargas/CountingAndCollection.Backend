@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentValidation.AspNetCore" Version="10.3.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Domain.Nucleus\Domain.Nucleus.csproj" />
+    <ProjectReference Include="..\Infraestructure.Transversal\Infraestructure.Transversal.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="DTOs\Application\Request\" />
+    <Folder Include="DTOs\Application\Response\" />
+    <Folder Include="DTOs\Orchestrator\Vehicles\" />
+    <Folder Include="Validator\" />
+  </ItemGroup>
+
+</Project>

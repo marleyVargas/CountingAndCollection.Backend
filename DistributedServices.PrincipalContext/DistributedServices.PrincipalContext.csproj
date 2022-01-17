@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.11" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.11" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.11">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.2" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+    <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Application.PrincipalContext\Application.PrincipalContext.csproj" />
+    <ProjectReference Include="..\Infraestructure.Nucleus\Infraestructure.Nucleus.csproj" />
+    <ProjectReference Include="..\Infraestructure.Transversal\Infraestructure.Transversal.csproj" />
+    <ProjectReference Include="..\Infraestructure.UsersContext\Infraestructure.UsersContext.csproj" />
+    <ProjectReference Include="..\Insfraestructure.PrincipalContext\Insfraestructure.PrincipalContext.csproj" />
+  </ItemGroup>
+
+</Project>
