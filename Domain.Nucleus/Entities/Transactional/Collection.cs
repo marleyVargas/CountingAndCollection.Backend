@@ -18,7 +18,7 @@ namespace Domain.Nucleus.Entities.Transactional
             get; set;
         }
 
-        public TimeSpan Hour
+        public decimal Hour
         {
             get; set;
         }
@@ -33,7 +33,12 @@ namespace Domain.Nucleus.Entities.Transactional
             get; set;
         }
 
-        public decimal TabulatedValue
+        public decimal TabuledValue
+        {
+            get; set;
+        }
+
+        public DateTime QueryDate
         {
             get; set;
         }

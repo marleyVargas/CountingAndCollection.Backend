@@ -6,6 +6,7 @@ using Domain.Nucleus.Interfaces;
 using Newtonsoft.Json;
 using RestSharp;
 using System;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Transversal.DTOs.Orchestrator.Login;
@@ -26,6 +27,7 @@ namespace Application.PrincipalContext.Services.OrchestratorServices
 
             this._unitOfWork = unitOfWork;
             this._logRequestAndResponseService = logRequestAndResponseService;
+            
             Autenticate();
             if (_loginDto == null)
                 throw new BusinessException("Invalid credentials");
@@ -33,7 +35,7 @@ namespace Application.PrincipalContext.Services.OrchestratorServices
 
         private bool Autenticate()
         {
-            if (_loginDto != null || _loginDto.Expiration > DateTime.Now)
+            if (_loginDto != null || _loginDto?.Expiration > DateTime.Now)
                 return true;
 
             var parameters = this._unitOfWork.ParametersRepository.GetAll();
@@ -52,7 +54,7 @@ namespace Application.PrincipalContext.Services.OrchestratorServices
 
             var response = ExecutePostAsync(request).Result;
 
-            ProcessResponse(logRequest, response);
+            var res = ProcessResponse(logRequest, response).Result;
 
             if (!response.IsSuccessful)
                 Throw(response);
@@ -61,12 +63,14 @@ namespace Application.PrincipalContext.Services.OrchestratorServices
             return true;
         }
 
-        public async Task<string> VehicleCounting(DateTime consultationDate)
+        public async Task<string> VehicleCounting(DateTime queryDate)
         {
-            var request = new RestRequest($"/api/ConteoVehiculos/{consultationDate}")
-                .AddHeader("Authorization", _loginDto.Token);
+            var strDate = queryDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
 
-            var logRequest = await ProcessRequest(null, consultationDate, request);
+            var request = new RestRequest($"/api/ConteoVehiculos/{strDate}")
+                .AddHeader("Authorization", "Bearer " + _loginDto.Token);
+
+            var logRequest = await ProcessRequest(null, strDate, request);
 
             var response = await ExecuteGetAsync(request);
 
@@ -79,12 +83,14 @@ namespace Application.PrincipalContext.Services.OrchestratorServices
 
         }
 
-        public async Task<string> VehicleCollection(DateTime consultationDate)
+        public async Task<string> VehicleCollection(DateTime queryDate)
         {
-            var request = new RestRequest($"/api/RecaudoVehiculos/{consultationDate}")
-                .AddHeader("Authorization", _loginDto.Token);
+            var strDate = queryDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
 
-            var logRequest = await ProcessRequest(null, consultationDate, request);
+            var request = new RestRequest($"/api/RecaudoVehiculos/{strDate}")
+                .AddHeader("Authorization", "Bearer "+_loginDto.Token);
+
+            var logRequest = await ProcessRequest(null, strDate, request);
 
             var response = await ExecuteGetAsync(request);
 
@@ -108,6 +114,8 @@ namespace Application.PrincipalContext.Services.OrchestratorServices
                     logRequestAndResponse.Method = request.Resource;
                     logRequestAndResponse.Request = model == null ? null : JsonConvert.SerializeObject(model);
                     logRequestAndResponse.RequestDate = DateTime.Now;
+                    logRequestAndResponse.CreatedDate = DateTime.Now;
+                    logRequestAndResponse.ResponseDate = DateTime.Now;
                     logRequestAndResponse.Active = true;
                     logRequestAndResponse.IsDeleted = false;
                 }
@@ -117,9 +125,8 @@ namespace Application.PrincipalContext.Services.OrchestratorServices
                 return logRequestAndResponse;
 
             }
-            catch (Exception Ex)
+            catch
             {
-
                 throw;
             }
         }
@@ -137,6 +144,7 @@ namespace Application.PrincipalContext.Services.OrchestratorServices
                 {
                     logRequestAndResponse.Response = JsonConvert.SerializeObject(logResponse);
                     logRequestAndResponse.ResponseDate = DateTime.Now;
+                    logRequestAndResponse.ExceptionType = response.StatusCode.ToString();
                     logRequestAndResponse.ExceptionMessage = response.ErrorMessage;
                     logRequestAndResponse.ExceptionStackTrace = response.ErrorException == null ? null : JsonConvert.SerializeObject(response.ErrorException);
                 }
@@ -147,7 +155,6 @@ namespace Application.PrincipalContext.Services.OrchestratorServices
             }
             catch
             {
-
                 throw;
             }
         }

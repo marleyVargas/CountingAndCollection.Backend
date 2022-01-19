@@ -4,12 +4,12 @@ namespace Transversal.QueryFilters
 {
     public class CollectionQueryFilter
     {
-        public DateTime? CreatedDateInit
+        public DateTime CreatedDateInit
         {
             get; set;
         }
 
-        public DateTime? CreatedDateFin
+        public DateTime CreatedDateFin
         {
             get; set;
         }

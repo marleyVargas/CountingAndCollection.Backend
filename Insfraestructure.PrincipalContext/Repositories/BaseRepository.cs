@@ -104,6 +104,11 @@ namespace Insfraestructure.PrincipalContext.Repositories
             await this._entities.AddAsync(entity);
         }
 
+        public async Task AddRange(T[] entity)
+        {
+            this._entities.AddRange(entity);
+        }
+
         public Task AddAsync(T entity)
         {
             this._entities.Add(entity);

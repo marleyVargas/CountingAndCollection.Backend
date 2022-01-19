@@ -11,7 +11,7 @@ namespace Application.PrincipalContext.Interfaces.Transactional
     public interface IVehicleService
     {
         Task<List<Collection>> GetVehicleCollectionByFilter(CollectionQueryFilter filters);
-        Task<bool> SaveVehicleCounting(DateTime consultationDate);
-        Task<bool> SaveVehicleCollection(DateTime consultationDate);
+        Task<bool> SaveVehicleCounting(DateTime queryDate);
+        Task<bool> SaveVehicleCollection(DateTime queryDate);
     }
 }

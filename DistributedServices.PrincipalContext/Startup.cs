@@ -22,6 +22,8 @@ using Infraestructure.Transversal.Mail;
 using Infraestructure.Transversal.SMS;
 using Infraestructure.UsersContext.Data.Entities;
 using Microsoft.AspNetCore.Identity;
+using Application.PrincipalContext.Services.TransactionalServices;
+using Application.PrincipalContext.Interfaces.Orchestrator;
 using Application.PrincipalContext.Services.OrchestratorServices;
 
 namespace DistributedServices.PrincipalContext
@@ -41,6 +43,14 @@ namespace DistributedServices.PrincipalContext
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // Add Cors
+            services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
+            {
+                builder.AllowAnyOrigin()
+                       .AllowAnyMethod()
+                       .AllowAnyHeader();
+            }));
+
             // Mapper
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
@@ -54,7 +64,7 @@ namespace DistributedServices.PrincipalContext
 
             services.Configure<PaginationOptions>(Configuration.GetSection("Pagination"));
 
-            services.AddDbContext<CountingAndCollectionContext>(options => options.UseSqlServer(Configuration.GetConnectionString("PaymentButton")));
+            services.AddDbContext<CountingAndCollectionContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Vargas")));
 
             services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
             {
@@ -69,6 +79,7 @@ namespace DistributedServices.PrincipalContext
             services.AddScoped<IParameterService, ParameterService>();
 
             services.AddScoped<IVehicleService, VehicleService>();
+            //services.AddScoped<IOrchestratorAPIService, OrchestratorAPIService>();
             
             services.AddScoped<ILogRequestAndResponseService, LogRequestAndResponseService>();
            
@@ -108,6 +119,9 @@ namespace DistributedServices.PrincipalContext
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            // Enable Cors
+            app.UseCors("MyPolicy");
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

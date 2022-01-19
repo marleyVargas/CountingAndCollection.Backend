@@ -5,6 +5,19 @@ namespace Transversal.DTOs.Transactional
 {
     public class ResponseCollectionDto
     {
+        public DateTime? Fecha
+        {
+            get; set;
+        }
+
+        public List<CollectionDto> CollectionDto
+        {
+            get; set;
+        }
+    }
+
+    public class CollectionDto
+    {
         public string Estacion
         {
             get; set;
@@ -15,7 +28,7 @@ namespace Transversal.DTOs.Transactional
             get; set;
         }
 
-        public TimeSpan Hora
+        public int Hora
         {
             get; set;
         }
@@ -26,6 +39,16 @@ namespace Transversal.DTOs.Transactional
         }
 
         public decimal ValorTabulado
+        {
+            get; set;
+        }
+
+        public int Cantidad
+        {
+            get; set;
+        }
+
+        public DateTime Fecha
         {
             get; set;
         }

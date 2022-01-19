@@ -13,7 +13,7 @@ namespace Insfraestructure.PrincipalContext.Data.Configurations.Application
     {
         public void Configure(EntityTypeBuilder<Parameters> builder)
         {
-            builder.ToTable("Parameters", "application");
+            builder.ToTable("Parameters", "Marley");
 
             builder.Property(e => e.CreatedDate)
                 .HasColumnType("datetime")

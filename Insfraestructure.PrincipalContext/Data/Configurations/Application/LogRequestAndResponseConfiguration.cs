@@ -15,7 +15,7 @@ namespace Insfraestructure.PrincipalContext.Data.Configurations.Application
         {
             builder.HasKey(e => e.Id);
 
-            builder.ToTable("LogRequestAndResponse", "application");
+            builder.ToTable("LogRequestAndResponse", "Marley");
 
             builder.Property(e => e.ResponseDate).HasColumnType("datetime");
 

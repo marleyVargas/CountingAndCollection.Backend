@@ -27,6 +27,8 @@ namespace Domain.Nucleus.Interfaces
 
         Task Add(T entity);
 
+        Task AddRange(T[] entity);
+
         Task AddAsync(T entity);
 
         void Update(T entity);

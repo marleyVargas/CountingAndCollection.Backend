@@ -5,9 +5,9 @@ namespace Application.PrincipalContext.Interfaces.Orchestrator
 {
     public interface IOrchestratorAPIService : IDisposable
     {
-        Task<string> VehicleCounting(DateTime consultationDate);
+        Task<string> VehicleCounting(DateTime queryDate);
 
-        Task<string> VehicleCollection(DateTime consultationDate);
+        Task<string> VehicleCollection(DateTime queryDate);
 
     }
 }
