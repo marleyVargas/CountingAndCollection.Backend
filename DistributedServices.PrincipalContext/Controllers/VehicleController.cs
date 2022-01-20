@@ -32,7 +32,7 @@ namespace DistributedServices.PrincipalContext.Controllers
         public IActionResult GetCollection(CollectionQueryFilter filters)
         {
             var result = this._vehicleService.GetVehicleCollectionByFilter(filters).Result;
-            var collectionsDto = this._mapper.Map<List<ResponseVehicleCollectionDto>>(result);
+            var collectionsDto = this._mapper.Map<List<ResponseVehicleCollectionDto>>(result).ToList();
 
             var metadata = new Metadata
             {
@@ -44,10 +44,10 @@ namespace DistributedServices.PrincipalContext.Controllers
                 HasPreviousPage = result.HasPreviousPage
             };
 
-            var response = new
+            var response = new ResponseCollectionPaginatorDto
             {
-                Data = collectionsDto,
-                Meta = metadata
+                data = collectionsDto,
+                meta = metadata
             };
 
             return Ok(response);

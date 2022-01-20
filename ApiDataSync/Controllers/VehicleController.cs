@@ -1,15 +1,18 @@
 ﻿using ApiDataSync.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Transversal.DTOs.Transactional.Response;
 using Transversal.QueryFilters;
 using Transversal.Response;
 
 namespace ApiDataSync.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class VehicleController : ControllerBase
@@ -28,9 +31,9 @@ namespace ApiDataSync.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<ApiResponse<bool>>> Post(CollectionQueryFilter filter)
+        public async Task<ActionResult<ResponseCollectionPaginatorDto>> Post(CollectionQueryFilter filter)
         {
-            return await _httpClientHelper.RestService<CollectionQueryFilter, ApiResponse<bool>>($"{uriAPI}/api/Vehicle", HttpMethod.Post, filter);
+            return await _httpClientHelper.RestService<CollectionQueryFilter, ResponseCollectionPaginatorDto>($"{uriAPI}/api/Vehicle/GetCollection", HttpMethod.Post, filter);
         }
     }
 }

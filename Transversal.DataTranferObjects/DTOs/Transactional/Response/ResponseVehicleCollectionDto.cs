@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Domain.Nucleus.CustomEntities;
+using System;
+using System.Collections.Generic;
 
 namespace Transversal.DTOs.Transactional.Response
 {
@@ -38,5 +40,19 @@ namespace Transversal.DTOs.Transactional.Response
         {
             get; set;
         }
+    }
+
+    public class ResponseCollectionPaginatorDto
+    {
+        public List<ResponseVehicleCollectionDto> data
+        {
+            get; set;
+        }
+
+        public Metadata meta
+        {
+            get; set;
+        }
+       
     }
 }
