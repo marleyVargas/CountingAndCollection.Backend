@@ -36,7 +36,7 @@ namespace DistributedServices.PrincipalContext.Controllers
             var email = this._configuration["Credentials:Email"];
             var password = this._configuration["Credentials:Password"];
 
-            if (requestLoginDto.Email != email)
+            if (requestLoginDto.User != email)
             {
                 return Unauthorized();
             }
@@ -70,7 +70,7 @@ namespace DistributedServices.PrincipalContext.Controllers
 
             var claims = new[]
             {
-                new Claim(JwtRegisteredClaimNames.UniqueName, requestLoginDto.Email),
+                new Claim(JwtRegisteredClaimNames.UniqueName, requestLoginDto.User),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(JwtRegisteredClaimNames.Iat, dateNow.ToString()),
             };

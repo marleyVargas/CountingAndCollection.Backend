@@ -8,7 +8,7 @@ namespace Transversal.DTOs.Account
 {
     public class RequestSecurityDto
     {
-        public string Email
+        public string User
         {
             get; set;
         }

@@ -30,10 +30,16 @@ namespace ApiDataSync.Controllers
             uriAPI = _configuration.GetSection("APIServicesSettings:DistributedServices").Value;
         }
 
-        [HttpPost]
+        [HttpPost("GetCollection")]
         public async Task<ActionResult<ResponseCollectionPaginatorDto>> Post(CollectionQueryFilter filter)
         {
             return await _httpClientHelper.RestService<CollectionQueryFilter, ResponseCollectionPaginatorDto>($"{uriAPI}/api/Vehicle/GetCollection", HttpMethod.Post, filter);
+        }
+
+        [HttpPost("GetReportTabulatedValue")]
+        public async Task<ActionResult<ApiResponse<object>>> GetReportTabulatedValue(CollectionQueryFilter filter)
+        {
+            return await _httpClientHelper.RestService<CollectionQueryFilter, ApiResponse<object>>($"{uriAPI}/api/Vehicle/GetReportTabulatedValue", HttpMethod.Post, filter);
         }
     }
 }
