@@ -4,7 +4,7 @@ namespace Transversal.DTOs.Transactional.Response
 {
     public class ResponseVehicleCollectionDto
     {
-        public string Estation
+        public string Station
         {
             get; set;
         }
@@ -14,7 +14,7 @@ namespace Transversal.DTOs.Transactional.Response
             get; set;
         }
 
-        public TimeSpan Hour
+        public decimal Hour
         {
             get; set;
         }
@@ -34,7 +34,7 @@ namespace Transversal.DTOs.Transactional.Response
             get; set;
         }
 
-        public DateTime CreatedDate
+        public DateTime QueryDate
         {
             get; set;
         }

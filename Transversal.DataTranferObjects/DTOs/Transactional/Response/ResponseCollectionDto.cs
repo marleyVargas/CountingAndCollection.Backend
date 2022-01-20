@@ -3,19 +3,6 @@ using System.Collections.Generic;
 
 namespace Transversal.DTOs.Transactional
 {
-    public class ResponseCollectionDto
-    {
-        public DateTime? Fecha
-        {
-            get; set;
-        }
-
-        public List<CollectionDto> CollectionDto
-        {
-            get; set;
-        }
-    }
-
     public class CollectionDto
     {
         public string Estacion

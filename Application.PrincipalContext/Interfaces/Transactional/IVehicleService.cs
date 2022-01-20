@@ -1,4 +1,5 @@
-﻿using Domain.Nucleus.Entities.Transactional;
+﻿using Domain.Nucleus.CustomEntities;
+using Domain.Nucleus.Entities.Transactional;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,10 @@ namespace Application.PrincipalContext.Interfaces.Transactional
 {
     public interface IVehicleService
     {
-        Task<List<Collection>> GetVehicleCollectionByFilter(CollectionQueryFilter filters);
+        Task<PagedList<Collection>> GetVehicleCollectionByFilter(CollectionQueryFilter filters);
+
+        Task<List<Collection>> GetVehicleCollectionByDates(DateTime dateInit, DateTime dateEnd);
+
         Task<bool> SaveVehicleCounting(DateTime queryDate);
         Task<bool> SaveVehicleCollection(DateTime queryDate);
     }

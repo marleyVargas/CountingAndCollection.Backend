@@ -14,6 +14,7 @@ namespace Application.PrincipalContext.Mappings
         {
             CreateMap<Parameters, ParameterDto>().ReverseMap();
             CreateMap<Collection, ResponseVehicleCollectionDto>().ReverseMap();
+            CreateMap<ResponseVehicleCollectionDto, Collection>().ReverseMap();
 
             CreateMap<CollectionDto, Collection>()
                 .ForMember(des => des.Amount, act => act.MapFrom(src => src.Cantidad))
