@@ -1,5 +1,4 @@
-﻿using Infraestructure.Transversal.Logs.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -36,31 +35,10 @@ namespace Application.Nucleus.Observers
         /// </summary>
         /// <param name="eventName"></param>
         /// <param name="information"></param>
-        public void NotifyEvent(string eventName, Information information)
-        {
-            foreach (Observer key in _observers.Keys)
-            {
-                if (_observers[key] == eventName)
-                {
-                    key.NotifyEvent(information);
-                }
-            }
-        }
+       
 
-        /// <summary>
-        /// Notify an exception to registered observers
-        /// </summary>
-        /// <param name="eventName"></param>
-        /// <param name="errorException"></param>
-        public void NotifyException(string eventName, ErrorException errorException)
-        {
-            foreach (Observer key in _observers.Keys)
-            {
-                if (_observers[key] == eventName)
-                {
-                    key.NotifyException(errorException);
-                }
-            }
-        }
+      
+       
+
     }
 }
