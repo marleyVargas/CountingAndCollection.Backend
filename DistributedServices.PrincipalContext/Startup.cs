@@ -25,6 +25,7 @@ using Microsoft.AspNetCore.Identity;
 using Application.PrincipalContext.Services.TransactionalServices;
 using Application.PrincipalContext.Interfaces.Orchestrator;
 using Application.PrincipalContext.Services.OrchestratorServices;
+using DistributedServices.Api.Dependencies;
 
 namespace DistributedServices.PrincipalContext
 {
@@ -76,18 +77,7 @@ namespace DistributedServices.PrincipalContext
             .AddDefaultTokenProviders();
 
             //Dependencies
-            services.AddScoped<IParameterService, ParameterService>();
-
-            services.AddScoped<IVehicleService, VehicleService>();
-            //services.AddScoped<IOrchestratorAPIService, OrchestratorAPIService>();
-            
-            services.AddScoped<ILogRequestAndResponseService, LogRequestAndResponseService>();
-           
-            services.AddSingleton<IMailHandler>(_ => new MailHandler(new MailServer()));
-            services.AddSingleton<ISMSHandler>(_ => new SMSHandler(new SMSSendRequest()));
-
-            services.AddScoped(typeof(IRepository<>), typeof(BaseRepository<>));
-            services.AddTransient<IUnitOfWork, UnitOfWork>();
+            services.AddInfrastructure();
 
             services.AddAuthentication(options =>
             {

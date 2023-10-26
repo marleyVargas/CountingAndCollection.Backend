@@ -14,7 +14,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Transversal.DTOs.Account;
 
-namespace DistributedServices.PrincipalContext.Controllers
+namespace DistributedServices.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

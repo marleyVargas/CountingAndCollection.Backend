@@ -19,7 +19,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Application.PrincipalContext\Application.PrincipalContext.csproj" />
-    <ProjectReference Include="..\Infraestructure.Nucleus\Infraestructure.Nucleus.csproj" />
     <ProjectReference Include="..\Infraestructure.Transversal\Infraestructure.Transversal.csproj" />
     <ProjectReference Include="..\Infraestructure.UsersContext\Infraestructure.UsersContext.csproj" />
     <ProjectReference Include="..\Insfraestructure.PrincipalContext\Insfraestructure.PrincipalContext.csproj" />

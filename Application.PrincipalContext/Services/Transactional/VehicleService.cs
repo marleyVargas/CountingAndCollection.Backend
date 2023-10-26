@@ -7,6 +7,7 @@ using Domain.Nucleus.CustomEntities;
 using Domain.Nucleus.Entities.Transactional;
 using Domain.Nucleus.Exceptions;
 using Domain.Nucleus.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using System;
@@ -54,7 +55,7 @@ namespace Application.PrincipalContext.Services.TransactionalServices
             return pagedCollections;
         }
 
-        public async Task<List<Collection>> GetVehicleCollectionByDates(DateTime dateInit, DateTime dateEnd)
+        public async Task<object> GetVehicleCollectionByDates(DateTime dateInit, DateTime dateEnd)
         {
             Expression<Func<Collection, bool>> query = q =>
            (
@@ -62,7 +63,41 @@ namespace Application.PrincipalContext.Services.TransactionalServices
                && q.QueryDate.Date <= dateEnd.Date
            );
 
-            return this._unitOfWork.CollectionRepository.GetByFilter(query).ToList();
+            var vehicles = this._unitOfWork.CollectionRepository.GetByFilter(query).ToList();
+            var listDates = vehicles
+                            .GroupBy(l => l.Station)
+                            .Select(cl => new
+                            {
+                                Station = cl.Key,
+                                DStation = cl.GroupBy(x => x.QueryDate)
+                                        .Select(
+                                            csLine => new
+                                            {
+                                                Date = csLine.Key,
+                                                Quantity = csLine.Sum(c => c.Amount),
+                                                Value = csLine.Sum(c => c.TabuledValue)
+                                            }).ToList(),
+                                Totals = cl.GroupBy(x => x.QueryDate)
+                                        .Select(
+                                            csLine => new
+                                            {
+                                                TotalsQuantity = cl.Sum(c => c.Amount),
+                                                TotalsValue = cl.Sum(c => c.TabuledValue)
+                                            }).FirstOrDefault(),
+                            }).ToList();
+
+            var totals = new
+            {
+                TotalsQuantity = listDates.Sum(x => x.Totals.TotalsQuantity),
+                TotalsValue = listDates.Sum(x => x.Totals.TotalsValue)
+            };
+
+            var objResult = new
+            {
+                listDates,
+                totals
+            };
+            return objResult;
         }
 
         public async Task<bool> SaveVehicleCounting(DateTime queryDate)

@@ -5,19 +5,24 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="DTOs\Application\Request\**" />
+    <Compile Remove="DTOs\Application\Response\**" />
+    <Compile Remove="DTOs\Orchestrator\Vehicles\**" />
+    <EmbeddedResource Remove="DTOs\Application\Request\**" />
+    <EmbeddedResource Remove="DTOs\Application\Response\**" />
+    <EmbeddedResource Remove="DTOs\Orchestrator\Vehicles\**" />
+    <None Remove="DTOs\Application\Request\**" />
+    <None Remove="DTOs\Application\Response\**" />
+    <None Remove="DTOs\Orchestrator\Vehicles\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="FluentValidation.AspNetCore" Version="10.3.4" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Domain.Nucleus\Domain.Nucleus.csproj" />
+    <ProjectReference Include="..\Domain.Nucleus\Domain.PrincipalContext.csproj" />
     <ProjectReference Include="..\Infraestructure.Transversal\Infraestructure.Transversal.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="DTOs\Application\Request\" />
-    <Folder Include="DTOs\Application\Response\" />
-    <Folder Include="DTOs\Orchestrator\Vehicles\" />
-    <Folder Include="Validator\" />
   </ItemGroup>
 
 </Project>

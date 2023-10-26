@@ -13,7 +13,7 @@ namespace Application.PrincipalContext.Interfaces.Transactional
     {
         Task<PagedList<Collection>> GetVehicleCollectionByFilter(CollectionQueryFilter filters);
 
-        Task<List<Collection>> GetVehicleCollectionByDates(DateTime dateInit, DateTime dateEnd);
+        Task<object> GetVehicleCollectionByDates(DateTime dateInit, DateTime dateEnd);
 
         Task<bool> SaveVehicleCounting(DateTime queryDate);
         Task<bool> SaveVehicleCollection(DateTime queryDate);

@@ -1,6 +1,7 @@
 ﻿using Application.PrincipalContext.Interfaces.Transactional;
 using AutoMapper;
 using Domain.Nucleus.CustomEntities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -8,15 +9,17 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Transversal.DTOs;
 using Transversal.DTOs.Transactional;
 using Transversal.DTOs.Transactional.Response;
 using Transversal.QueryFilters;
 using Transversal.Response;
 
-namespace DistributedServices.PrincipalContext.Controllers
+namespace DistributedServices.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class VehicleController : ControllerBase
     {
         private readonly IVehicleService _vehicleService;
@@ -58,41 +61,7 @@ namespace DistributedServices.PrincipalContext.Controllers
         {
             var result = this._vehicleService.GetVehicleCollectionByDates(filters.CreatedDateInit.Value, filters.CreatedDateFin.Value).Result;
 
-            var listDates = result
-                            .GroupBy(l => l.Station)
-                            .Select(cl => new
-                            {
-                                Station = cl.Key,
-                                DStation = cl.GroupBy(x => x.QueryDate)
-                                        .Select(
-                                            csLine => new
-                                            {
-                                                Date = csLine.Key,
-                                                Quantity = csLine.Sum(c => c.Amount),
-                                                Value = csLine.Sum(c => c.TabuledValue)
-                                            }).ToList(),
-                                Totals = cl.GroupBy(x => x.QueryDate)
-                                        .Select(
-                                            csLine => new
-                                            {
-                                                TotalsQuantity = cl.Sum(c => c.Amount),
-                                                TotalsValue = cl.Sum(c => c.TabuledValue)
-                                            }).FirstOrDefault(),
-                            }).ToList();
-
-            var totals = new
-            {
-                TotalsQuantity = listDates.Sum(x => x.Totals.TotalsQuantity),
-                TotalsValue = listDates.Sum(x => x.Totals.TotalsValue)
-            };
-
-            var objResult = new
-            {
-                listDates,
-                totals
-            };
-
-            var response = new ApiResponse<object>(objResult);
+            var response = new ApiResponse<object>(result);
             return Ok(response);
         }
 

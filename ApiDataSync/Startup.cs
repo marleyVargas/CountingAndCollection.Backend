@@ -14,7 +14,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Transversal.Filters;
 
 namespace ApiDataSync
 {
@@ -50,13 +49,13 @@ namespace ApiDataSync
             services.AddHttpClient();
 
             services.AddControllers(options => {
-                options.Filters.Add<GlobalExceptionFilter>();
+               
             }).ConfigureApiBehaviorOptions(options => {
             });
 
             services.AddMvc(options =>
             {
-                options.Filters.Add<ValidationFilter>();
+                
             }).AddFluentValidation(options =>
             {
                 options.RegisterValidatorsFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
