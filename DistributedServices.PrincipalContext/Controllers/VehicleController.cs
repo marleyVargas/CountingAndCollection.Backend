@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Intrinsics.X86;
 using System.Threading.Tasks;
 using Transversal.DTOs;
 using Transversal.DTOs.Transactional;
@@ -20,7 +21,7 @@ namespace DistributedServices.Api.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    public class VehicleController : ControllerBase
+    public class VehicleController : ApiControllerBase
     {
         private readonly IVehicleService _vehicleService;
         private readonly IMapper _mapper;
@@ -35,48 +36,28 @@ namespace DistributedServices.Api.Controllers
         public IActionResult GetCollection(CollectionQueryFilter filters)
         {
             var result = this._vehicleService.GetVehicleCollectionByFilter(filters).Result;
-            var collectionsDto = this._mapper.Map<List<ResponseVehicleCollectionDto>>(result).ToList();
-
-            var metadata = new Metadata
-            {
-                TotalCount = result.TotalCount,
-                PageSize = result.PageSize,
-                CurrentPage = result.CurrentPage,
-                TotalPages = result.TotalPages,
-                HasNextPage = result.HasNextPage,
-                HasPreviousPage = result.HasPreviousPage
-            };
-
-            var response = new ResponseCollectionPaginatorDto
-            {
-                data = collectionsDto,
-                meta = metadata
-            };
-
-            return Ok(response);
+            return HandleResult(result.Result, result.ErrorProvider);
         }
 
         [HttpPost("GetReportTabulatedValue")]
         public IActionResult GetReportTabulatedValue(CollectionQueryFilter filters)
         {
             var result = this._vehicleService.GetVehicleCollectionByDates(filters.CreatedDateInit.Value, filters.CreatedDateFin.Value).Result;
-
-            var response = new ApiResponse<object>(result);
-            return Ok(response);
+            return HandleResult(result.Result, result.ErrorProvider);
         }
 
         [HttpGet("SaveCounting/{queryDate}")]
         public async Task<IActionResult> SaveCounting(DateTime queryDate)
         {
-            var response = await this._vehicleService.SaveVehicleCounting(queryDate);
-            return Ok(response);
+            var result = await this._vehicleService.SaveVehicleCounting(queryDate);
+            return HandleResult(result.Result, result.ErrorProvider);
         }
 
         [HttpGet("SaveCollection/{queryDate}")]
         public async Task<IActionResult> SaveCollection(DateTime queryDate)
         {
-            var response = await this._vehicleService.SaveVehicleCollection(queryDate);
-            return Ok(response);
+            var result = await this._vehicleService.SaveVehicleCollection(queryDate);
+            return HandleResult(result.Result, result.ErrorProvider);
         }
 
 

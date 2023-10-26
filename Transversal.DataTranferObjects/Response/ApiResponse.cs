@@ -19,4 +19,7 @@ namespace Transversal.Response
             get; set;
         }
     }
+
+
+
 }

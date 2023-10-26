@@ -5,17 +5,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Transversal.DTOs.Transactional.Response;
+using Transversal.DTOs;
 using Transversal.QueryFilters;
 
 namespace Application.PrincipalContext.Interfaces.Transactional
 {
     public interface IVehicleService
     {
-        Task<PagedList<Collection>> GetVehicleCollectionByFilter(CollectionQueryFilter filters);
+        Task<Response<ResponseCollectionPaginatorDto>> GetVehicleCollectionByFilter(CollectionQueryFilter filters);
 
-        Task<object> GetVehicleCollectionByDates(DateTime dateInit, DateTime dateEnd);
+        Task<Response<object>> GetVehicleCollectionByDates(DateTime dateInit, DateTime dateEnd);
 
-        Task<bool> SaveVehicleCounting(DateTime queryDate);
-        Task<bool> SaveVehicleCollection(DateTime queryDate);
+        Task<Response<bool>> SaveVehicleCounting(DateTime queryDate);
+        Task<Response<bool>> SaveVehicleCollection(DateTime queryDate);
     }
 }

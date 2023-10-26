@@ -15,9 +15,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using Transversal.DTOs;
 using Transversal.DTOs.Transactional;
 using Transversal.DTOs.Transactional.Response;
 using Transversal.QueryFilters;
+using Transversal.Response;
+
 namespace Application.PrincipalContext.Services.TransactionalServices
 {
     public class VehicleService : IVehicleService
@@ -36,72 +39,107 @@ namespace Application.PrincipalContext.Services.TransactionalServices
             this._paginationOptions = options.Value;
         }
 
-        public async Task<PagedList<Collection>> GetVehicleCollectionByFilter(CollectionQueryFilter filters)
+        public async Task<Response<ResponseCollectionPaginatorDto>> GetVehicleCollectionByFilter(CollectionQueryFilter filters)
         {
-            Expression<Func<Collection, bool>> query = q =>
-            (
-                filters.CreatedDateInit.HasValue ? q.QueryDate.Date >= filters.CreatedDateInit.Value.Date : q.QueryDate.Date == q.QueryDate.Date
-                && filters.CreatedDateFin.HasValue ? q.QueryDate.Date >= filters.CreatedDateFin.Value.Date : q.QueryDate.Date == q.QueryDate.Date
-                && !String.IsNullOrEmpty(filters.Station) ? q.Station == filters.Station : q.Station == q.Station
-            );
+            Response<ResponseCollectionPaginatorDto> result = new();
+            try
+            {
+                Expression<Func<Collection, bool>> query = q =>
+                (
+                    filters.CreatedDateInit.HasValue ? q.QueryDate.Date >= filters.CreatedDateInit.Value.Date : q.QueryDate.Date == q.QueryDate.Date
+                    && filters.CreatedDateFin.HasValue ? q.QueryDate.Date >= filters.CreatedDateFin.Value.Date : q.QueryDate.Date == q.QueryDate.Date
+                    && !String.IsNullOrEmpty(filters.Station) ? q.Station == filters.Station : q.Station == q.Station
+                );
 
-            filters.PageNumber = filters.PageNumber == 0 ? this._paginationOptions.DefaultPageNumber : filters.PageNumber;
-            filters.PageSize = filters.PageSize == 0 ? this._paginationOptions.DefaultPageSize : filters.PageSize;
+                filters.PageNumber = filters.PageNumber == 0 ? this._paginationOptions.DefaultPageNumber : filters.PageNumber;
+                filters.PageSize = filters.PageSize == 0 ? this._paginationOptions.DefaultPageSize : filters.PageSize;
 
-            var collections = this._unitOfWork.CollectionRepository.GetByFilter(query).ToList();
+                var collections = this._unitOfWork.CollectionRepository.GetByFilter(query).ToList();
 
-            var pagedCollections = PagedList<Collection>.Create(collections, filters.PageNumber, filters.PageSize);
+                var pagedCollections = PagedList<Collection>.Create(collections, filters.PageNumber, filters.PageSize);
 
-            return pagedCollections;
+                var collectionsDto = this._mapper.Map<List<ResponseVehicleCollectionDto>>(pagedCollections).ToList();
+
+                var metadata = new Metadata
+                {
+                    TotalCount = pagedCollections.TotalCount,
+                    PageSize = pagedCollections.PageSize,
+                    CurrentPage = pagedCollections.CurrentPage,
+                    TotalPages = pagedCollections.TotalPages,
+                    HasNextPage = pagedCollections.HasNextPage,
+                    HasPreviousPage = pagedCollections.HasPreviousPage
+                };
+
+                result.Result = new ResponseCollectionPaginatorDto
+                {
+                    data = collectionsDto,
+                    meta = metadata
+                };
+            }
+            catch (Exception ex)
+            {
+                result.ErrorProvider.AddError(ex.Source, ex.GetBaseException().Message);
+            }
+            return result;
+
         }
 
-        public async Task<object> GetVehicleCollectionByDates(DateTime dateInit, DateTime dateEnd)
+        public async Task<Response<object>> GetVehicleCollectionByDates(DateTime dateInit, DateTime dateEnd)
         {
-            Expression<Func<Collection, bool>> query = q =>
-           (
-               q.QueryDate.Date >= dateInit.Date
-               && q.QueryDate.Date <= dateEnd.Date
-           );
-
-            var vehicles = this._unitOfWork.CollectionRepository.GetByFilter(query).ToList();
-            var listDates = vehicles
-                            .GroupBy(l => l.Station)
-                            .Select(cl => new
-                            {
-                                Station = cl.Key,
-                                DStation = cl.GroupBy(x => x.QueryDate)
-                                        .Select(
-                                            csLine => new
-                                            {
-                                                Date = csLine.Key,
-                                                Quantity = csLine.Sum(c => c.Amount),
-                                                Value = csLine.Sum(c => c.TabuledValue)
-                                            }).ToList(),
-                                Totals = cl.GroupBy(x => x.QueryDate)
-                                        .Select(
-                                            csLine => new
-                                            {
-                                                TotalsQuantity = cl.Sum(c => c.Amount),
-                                                TotalsValue = cl.Sum(c => c.TabuledValue)
-                                            }).FirstOrDefault(),
-                            }).ToList();
-
-            var totals = new
+            Response<object> result = new();
+            try
             {
-                TotalsQuantity = listDates.Sum(x => x.Totals.TotalsQuantity),
-                TotalsValue = listDates.Sum(x => x.Totals.TotalsValue)
-            };
+                Expression<Func<Collection, bool>> query = q =>
+               (
+                   q.QueryDate.Date >= dateInit.Date
+                   && q.QueryDate.Date <= dateEnd.Date
+                );
 
-            var objResult = new
+                var vehicles = this._unitOfWork.CollectionRepository.GetByFilter(query).ToList();
+                var listDates = vehicles
+                                .GroupBy(l => l.Station)
+                                .Select(cl => new
+                                {
+                                    Station = cl.Key,
+                                    DStation = cl.GroupBy(x => x.QueryDate)
+                                            .Select(
+                                                csLine => new
+                                                {
+                                                    Date = csLine.Key,
+                                                    Quantity = csLine.Sum(c => c.Amount),
+                                                    Value = csLine.Sum(c => c.TabuledValue)
+                                                }).ToList(),
+                                    Totals = cl.GroupBy(x => x.QueryDate)
+                                            .Select(
+                                                csLine => new
+                                                {
+                                                    TotalsQuantity = cl.Sum(c => c.Amount),
+                                                    TotalsValue = cl.Sum(c => c.TabuledValue)
+                                                }).FirstOrDefault(),
+                                }).ToList();
+
+                var totals = new
+                {
+                    TotalsQuantity = listDates.Sum(x => x.Totals.TotalsQuantity),
+                    TotalsValue = listDates.Sum(x => x.Totals.TotalsValue)
+                };
+
+                result.Result = new
+                {
+                    listDates,
+                    totals
+                };                
+            }
+            catch (Exception ex)
             {
-                listDates,
-                totals
-            };
-            return objResult;
+                result.ErrorProvider.AddError(ex.Source, ex.GetBaseException().Message);
+            }
+            return result;
         }
 
-        public async Task<bool> SaveVehicleCounting(DateTime queryDate)
+        public async Task<Response<bool>> SaveVehicleCounting(DateTime queryDate)
         {
+            Response<bool> result = new();
             try
             {
                 Expression<Func<Collection, bool>> query = q =>
@@ -137,20 +175,22 @@ namespace Application.PrincipalContext.Services.TransactionalServices
                     await this._unitOfWork.CommitTransactionAsync();
                 }
 
-                return true;
+                result.Result = true;
             }
-            catch
+            catch(Exception ex)
             {
                 if (this._unitOfWork.IsOnTransaction())
                     this._unitOfWork.RollbackTransaction();
 
-                throw;
+                result.ErrorProvider.AddError(ex.Source, ex.GetBaseException().Message); ;
+                result.Result = false;
             }
-
+            return result;
         }
 
-        public async Task<bool> SaveVehicleCollection(DateTime queryDate)
+        public async Task<Response<bool>> SaveVehicleCollection(DateTime queryDate)
         {
+            Response<bool> result = new();
             try
             {
                 Expression<Func<Collection, bool>> query = q =>
@@ -187,16 +227,17 @@ namespace Application.PrincipalContext.Services.TransactionalServices
                     await this._unitOfWork.CommitTransactionAsync();
                 }
 
-                return true;
+                result.Result = true;
             }
-            catch
+            catch(Exception ex)
             {
                 if (this._unitOfWork.IsOnTransaction())
                     this._unitOfWork.RollbackTransaction();
 
-                throw;
+                result.ErrorProvider.AddError(ex.Source, ex.GetBaseException().Message); ;
+                result.Result = false;
             }
-
+            return result;
         }
     }
 }
