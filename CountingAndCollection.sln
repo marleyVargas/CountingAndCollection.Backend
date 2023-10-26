@@ -19,11 +19,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1.6.Transversal", "1.6.Tran
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1.2.1.DistributedServices.Context", "1.2.1.DistributedServices.Context", "{69A93223-1745-4C69-BCE5-9117DC64B30A}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1.5.2.Infrastructure.PrincipalContext", "1.5.2.Infrastructure.PrincipalContext", "{FC7B55A5-E6E5-4AC2-ABB2-A20139519A2D}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1.5.1.Infrastructure.PrincipalContext", "1.5.1.Infrastructure.PrincipalContext", "{FC7B55A5-E6E5-4AC2-ABB2-A20139519A2D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1.5.3.Infrastructure.Transversal", "1.5.3.Infrastructure.Transversal", "{BED69448-2AF5-4CD2-9CEA-05DCB6B3C8B2}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1.5.4.Infrastructure.UsersContext", "1.5.4.Infrastructure.UsersContext", "{F6620BCB-E7D9-4E62-9666-1F6E718FEC82}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1.5.2.Infrastructure.UsersContext", "1.5.2.Infrastructure.UsersContext", "{F6620BCB-E7D9-4E62-9666-1F6E718FEC82}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DistributedServices.Api", "DistributedServices.PrincipalContext\DistributedServices.Api.csproj", "{5CC7A2CB-8393-489D-AB6E-F0E0F67A4F98}"
 EndProject
