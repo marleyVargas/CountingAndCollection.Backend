@@ -24,12 +24,10 @@ namespace DistributedServices.Api.Controllers
     public class VehicleController : ApiControllerBase
     {
         private readonly IVehicleService _vehicleService;
-        private readonly IMapper _mapper;
 
         public VehicleController(IVehicleService vehicleService, IMapper mapper)
         {
             this._vehicleService = vehicleService;
-            this._mapper = mapper;
         }
 
         [HttpPost("GetCollection")]
