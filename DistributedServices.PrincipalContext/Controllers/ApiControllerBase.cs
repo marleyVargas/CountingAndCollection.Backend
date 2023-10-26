@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Transversal.APIResponseHandlers.Wrappers;
-using Transversal.Response;
 using Transversal.ServiceErrorHandlers;
 
 namespace DistributedServices.Api.Controllers

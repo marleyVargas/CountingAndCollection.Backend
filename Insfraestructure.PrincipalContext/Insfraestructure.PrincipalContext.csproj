@@ -16,7 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Domain.Nucleus\Domain.PrincipalContext.csproj" />
-    <ProjectReference Include="..\Transversal.DataTranferObjects\Transversal.csproj" />
+    <ProjectReference Include="..\Transversal.DataTranferObjects\Utility.csproj" />
   </ItemGroup>
 
 </Project>

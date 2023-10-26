@@ -10,11 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Intrinsics.X86;
 using System.Threading.Tasks;
-using Transversal.DTOs;
-using Transversal.DTOs.Transactional;
-using Transversal.DTOs.Transactional.Response;
 using Transversal.QueryFilters;
-using Transversal.Response;
 
 namespace DistributedServices.Api.Controllers
 {

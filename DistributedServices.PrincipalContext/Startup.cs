@@ -20,7 +20,6 @@ using System.Text;
 using Transversal.Filters;
 using Infraestructure.Transversal.Mail;
 using Infraestructure.Transversal.SMS;
-using Infraestructure.UsersContext.Data.Entities;
 using Microsoft.AspNetCore.Identity;
 using Application.PrincipalContext.Services.TransactionalServices;
 using Application.PrincipalContext.Interfaces.Orchestrator;
@@ -66,15 +65,6 @@ namespace DistributedServices.PrincipalContext
             services.Configure<PaginationOptions>(Configuration.GetSection("Pagination"));
 
             services.AddDbContext<CountingAndCollectionContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Vargas")));
-
-            services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
-            {
-                options.SignIn.RequireConfirmedAccount = false;
-                options.Lockout.AllowedForNewUsers = true;
-                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
-                options.Lockout.MaxFailedAccessAttempts = 3;
-            }).AddEntityFrameworkStores<CountingAndCollectionContext>()
-            .AddDefaultTokenProviders();
 
             //Dependencies
             services.AddInfrastructure();
